@@ -80,7 +80,7 @@ Find all books:
 http :8080/books
 ```
 
-Delete book:
+Delete a book:
 ```bash
 http DELETE :8080/books/1
 ```

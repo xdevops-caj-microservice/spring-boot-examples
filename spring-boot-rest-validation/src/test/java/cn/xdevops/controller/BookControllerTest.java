@@ -1,6 +1,5 @@
 package cn.xdevops.controller;
 
-import cn.xdevops.controller.BookController;
 import cn.xdevops.entity.Book;
 import cn.xdevops.service.BookService;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +60,7 @@ public class BookControllerTest {
 
         // ensure bookService.findBookById(id) method is not called
         Mockito.verify(bookService, Mockito.times(0))
-                .findBookById(Mockito.any(Long.class));
+                .findBookById(Mockito.anyLong());
 
     }
 }

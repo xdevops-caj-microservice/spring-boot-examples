@@ -14,6 +14,9 @@
     - Customize exception
     - Global exception handler
     - Remove `trace` info from error response
+- Unit Test
+    - JUnit 5 + Mockito
+    - Test the Controller class
     
 
 ## Run application
@@ -85,7 +88,12 @@ Delete a book:
 http DELETE :8080/books/1
 ```
 
+## Unit Test
+
+- BookControllerTest
+
 ## References
 
 - https://mkyong.com/spring-boot/spring-rest-hello-world-example/
 - [HTTPie Cheatsheet](https://devhints.io/httpie)
+- https://spring.io/guides/gs/testing-web/

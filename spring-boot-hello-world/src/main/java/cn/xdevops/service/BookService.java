@@ -3,11 +3,13 @@ package cn.xdevops.service;
 import cn.xdevops.entity.Book;
 import cn.xdevops.exception.BookNotFoundException;
 import cn.xdevops.repository.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class BookService {
 
     private BookRepository bookRepository;
@@ -17,6 +19,7 @@ public class BookService {
     }
 
     public Book save(Book book) {
+        log.info("Call BookService.save() ....");
         return bookRepository.save(book);
     }
 
@@ -40,6 +43,7 @@ public class BookService {
     }
 
     public void deleteBookById(Long id) {
+        log.info("Call BookService.deleteBookById() ....");
         bookRepository.deleteById(id);
     }
 

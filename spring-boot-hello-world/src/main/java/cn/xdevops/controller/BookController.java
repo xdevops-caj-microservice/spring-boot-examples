@@ -2,6 +2,7 @@ package cn.xdevops.controller;
 
 import cn.xdevops.entity.Book;
 import cn.xdevops.service.BookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/books")
+@Slf4j
 public class BookController {
 
     private BookService bookService;
@@ -20,6 +22,7 @@ public class BookController {
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public Book newBook(@RequestBody Book book) {
+        log.info("Call BookController.newBook() ...");
         return bookService.save(book);
     }
 
@@ -35,6 +38,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable Long id) {
+        log.info("Call BookController.deleteBook() ...");
         bookService.deleteBookById(id);
     }
 

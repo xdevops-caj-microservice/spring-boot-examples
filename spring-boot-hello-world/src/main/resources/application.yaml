@@ -1,0 +1,3 @@
+server:
+  error:
+    include-stacktrace: never # remove `trace` information in error response

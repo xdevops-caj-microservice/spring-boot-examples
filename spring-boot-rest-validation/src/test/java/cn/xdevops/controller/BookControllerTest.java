@@ -1,4 +1,4 @@
-package cn.xdevops;
+package cn.xdevops.controller;
 
 import cn.xdevops.controller.BookController;
 import cn.xdevops.entity.Book;

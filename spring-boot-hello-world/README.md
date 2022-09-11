@@ -95,5 +95,6 @@ http DELETE :8080/books/1
 ## References
 
 - https://mkyong.com/spring-boot/spring-rest-hello-world-example/
+- https://mkyong.com/spring-boot/spring-rest-integration-test-example/
 - [HTTPie Cheatsheet](https://devhints.io/httpie)
 - https://spring.io/guides/gs/testing-web/

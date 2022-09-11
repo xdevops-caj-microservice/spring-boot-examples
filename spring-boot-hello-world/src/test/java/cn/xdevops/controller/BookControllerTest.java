@@ -1,7 +1,9 @@
 package cn.xdevops.controller;
 
 import cn.xdevops.entity.Book;
+import cn.xdevops.exception.BookNotFoundException;
 import cn.xdevops.service.BookService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class BookControllerTest {
 
+    private static final ObjectMapper om = new ObjectMapper();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -35,14 +39,20 @@ public class BookControllerTest {
     @DisplayName("should create a new book")
     void shouldCreateANewBook() throws Exception {
         String bookJson = "{\"name\": \"Spring Boot Hello World\", \"author\":\"William\", \"price\": 8.88}";
+        Mockito.when(bookService.save(Mockito.any(Book.class)))
+                .thenReturn(om.readValue(bookJson, Book.class));
 
         mockMvc.perform(post("/books")
                 .content(bookJson)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", is("Spring Boot Hello World")))
+                .andExpect(jsonPath("$.author", is("William")))
+                .andExpect(jsonPath("$.price", is(8.88)));
 
-        // ensure bookService.save(book) method is called
-        // TODO but why no logs printed in BookService.save() method?
+
+        // ensure the mocked bookService.save(book) method is called
+        // notes: the real BookService.save() method is not called
         Mockito.verify(bookService).save(Mockito.any(Book.class));
     }
 
@@ -58,6 +68,21 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.name", is("Spring Boot Hello World")))
                 .andExpect(jsonPath("$.author", is("William")))
                 .andExpect(jsonPath("$.price", is(8.88)));
+
+        // ensure the mocked method is called
+        Mockito.verify(bookService).findBookById(1L);
+    }
+
+    @Test
+    @DisplayName("should not found a book by id")
+    void shouldNotFoundABookById() throws Exception {
+        Mockito.when(bookService.findBookById(5L)).thenThrow(new BookNotFoundException(5L));
+
+        mockMvc.perform(get("/books/5"))
+                .andExpect(status().isNotFound());
+
+        // ensure the mocked method is called
+        Mockito.verify(bookService).findBookById(5L);
     }
 
     @Test
@@ -81,16 +106,39 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$[1].name", is("REST API design")))
                 .andExpect(jsonPath("$[1].author", is("Martin")))
                 .andExpect(jsonPath("$[1].price", is(9.99)));
+
+        // ensure the mocked method is called
+        Mockito.verify(bookService).findAllBooks();
+    }
+
+    @Test
+    @DisplayName("should update a book")
+    void shouldUpdateABook() throws Exception {
+        String newBookJson = "{\"name\": \"REST API design second edition\", \"author\":\"Martin Fly\", \"price\": 10.05}";
+        Mockito.when(bookService.saveOrUpdateBook(Mockito.any(Book.class), Mockito.eq(2L)))
+                .thenReturn(om.readValue(newBookJson, Book.class));
+
+        mockMvc.perform(put("/books/2")
+                .content(newBookJson)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("REST API design second edition")))
+                .andExpect(jsonPath("$.author", is("Martin Fly")))
+                .andExpect(jsonPath("$.price", is(10.05)));
+
+        // ensure the mocked method is called
+        Mockito.verify(bookService).saveOrUpdateBook(Mockito.any(Book.class), Mockito.eq(2L));
     }
 
     @Test
     @DisplayName("should delete a book by id")
     void shouldDeleteABookById() throws Exception {
+        Mockito.doNothing().when(bookService).deleteBookById(1L);
+
         mockMvc.perform(delete("/books/1"))
                 .andExpect(status().isOk());
 
-        // ensure bookService.deleteBookById(id) method is called
-        // TODO but why no logs printed in BookService.deleteBookById() method?
+        // ensure the mocked method is called
         Mockito.verify(bookService).deleteBookById(Mockito.anyLong());
     }
 }

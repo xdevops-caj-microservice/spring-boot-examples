@@ -75,3 +75,4 @@ The error response:
 
 - https://mkyong.com/spring-boot/spring-rest-validation-example/
 - https://rieckpil.de/guide-to-testing-spring-boot-applications-with-mockmvc/
+- https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.servlet.spring-mvc.error-handling

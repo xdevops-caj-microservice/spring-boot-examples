@@ -29,10 +29,21 @@ Plain Mockito library
 Spring Boot library wrapping Mockito library
 - `@MockBean` // mock a bean in spring boot test application text
 
-Typical usage：
-- Test service layer: 
-  1. Use `@ExtendWith(MockitoExtension.class)` to enable Mockito 
-  2. Use `@Mock` to mock repository 
+
+References
+- https://stackoverflow.com/questions/44200720/difference-between-mock-mockbean-and-mockito-mock
+- https://rieckpil.de/difference-between-mock-and-mockbean-spring-boot-applications/
+
+
+## Layered Testing
+
+- Test repository layer:
+  1. Use `@DataJpaTest` to test repository layer
+  2. Use `@TestMethodOrder` and `@Order` to run test methods in order in the test class
+  3. Use `@Rollbak(value = false)` to disable roll back data (commit data changes into database)
+- Test service layer:
+  1. Use `@ExtendWith(MockitoExtension.class)` to enable Mockito
+  2. Use `@Mock` to mock repository
   3. Use `@InjectMocks` to mock service
   4. Use `Mockito.when()` to mock the method
   5. Use `Mockito.verify()` to verity the mocked method is called (mandatory for no return value case)
@@ -44,13 +55,10 @@ Typical usage：
   5. Use `mockMvc.perform()` to test controller method
   6. Use `Mockito.verify()` to verity the mocked method is called (mandatory for no return value case)
 
-References
-- https://stackoverflow.com/questions/44200720/difference-between-mock-mockbean-and-mockito-mock
-- https://rieckpil.de/difference-between-mock-and-mockbean-spring-boot-applications/
 
-
-## Layered Testing
-
+Test class examples:
+- Test Repository Layer
+  - EmployeeRepositoryTest
 - Test Service Layer
   - EmployeeServiceTest
 - Test Controller Layer
@@ -61,3 +69,4 @@ References
 ## References
 
 - [Spring Boot Unit Testing Service Layer using JUnit and Mockito](https://www.javaguides.net/2022/03/spring-boot-unit-testing-crud-rest-api-with-junit-and-mockito.html)
+- [CRUD JUnit Tests for Spring Data JPA - Testing Repository Layer](https://www.javaguides.net/2021/07/crud-junit-tests-for-spring-data-jpa.html)

@@ -8,7 +8,7 @@
   - Maven
 - Dev Framework
   - Spring Boot
-  - Lombok
+  - [Lombok](https://projectlombok.org/features/)
 - Unit Framework, Mock and Assertion
   - JUnit 5 Framework
   - Hamcrest
@@ -16,12 +16,14 @@
   - JsonPath
   - Mockito
 - Maven Plugins
-  - maven-site-plugin
-  - maven-surefire-report-plugin
-  - maven-site-plugin
-  - maven-jxr-plugin
+  - [maven-site-plugin](https://maven.apache.org/plugins/maven-site-plugin/)
+  - [maven-surefire-plugin](https://maven.apache.org/surefire/maven-surefire-plugin/)
+  - [maven-surefire-report-plugin](https://maven.apache.org/surefire/maven-surefire-report-plugin/)
+  - [maven-jxr-plugin](https://maven.apache.org/jxr/maven-jxr-plugin/)
+  - [maven-failsafe-plugin](https://maven.apache.org/surefire/maven-failsafe-plugin/)
 - IDE
   - IntelliJ IDEA
+  - [Spring Tools](https://spring.io/tools)
     
 ## Mock Annotations
 
@@ -62,14 +64,15 @@ References
 - Integration test
   TBC with Testcontainers
 
-Test class examples:
+Unit Test class examples:
 - Test Repository Layer
   - EmployeeRepositoryTest
 - Test Service Layer
   - EmployeeServiceTest
 - Test Controller Layer
   - EmployeeControllerTest
-- Integration Test
+
+Integration Test
   - TBC
   
 ## Maven Commands
@@ -92,9 +95,9 @@ Notes:
 References:
 - https://maven.apache.org/surefire/maven-surefire-report-plugin/index.html
 - https://maven.apache.org/surefire/maven-surefire-report-plugin/examples/cross-referencing.html
+- https://maven.apache.org/plugins/maven-site-plugin/
 - https://www.thecodejournal.tech/2021/05/unit-testing-in-maven-junit-html-report/
 - https://howtodoinjava.com/junit5/junit-html-report/
-- https://maven.apache.org/plugins/maven-site-plugin/
 - https://stackoverflow.com/questions/35982312/disable-all-reports-from-mavens-project-info-reports-plugin
 
 ## References

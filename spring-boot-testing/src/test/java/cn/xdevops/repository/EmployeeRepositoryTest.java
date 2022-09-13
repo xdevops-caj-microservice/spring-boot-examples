@@ -27,7 +27,7 @@ class EmployeeRepositoryTest {
 
         Employee savedEmployee = employeeRepository.save(newEmployee);
 
-        assertThat(savedEmployee.getId()).isGreaterThan(0L);
+        assertThat(savedEmployee.getId()).isGreaterThan(1L);
         assertThat(savedEmployee).usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(newEmployee);

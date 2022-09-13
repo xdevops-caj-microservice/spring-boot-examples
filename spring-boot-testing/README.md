@@ -15,6 +15,11 @@
   - [AssertJ Core](https://assertj.github.io/doc/)
   - JsonPath
   - Mockito
+- Maven Plugins
+  - maven-site-plugin
+  - maven-surefire-report-plugin
+  - maven-site-plugin
+  - maven-jxr-plugin
 - IDE
   - IntelliJ IDEA
     
@@ -54,7 +59,8 @@ References
   4. Use `Mockito.when()` to mock the method
   5. Use `mockMvc.perform()` to test controller method
   6. Use `Mockito.verify()` to verity the mocked method is called (mandatory for no return value case)
-
+- Integration test
+  TBC with Testcontainers
 
 Test class examples:
 - Test Repository Layer
@@ -65,6 +71,31 @@ Test class examples:
   - EmployeeControllerTest
 - Integration Test
   - TBC
+  
+## Maven Commands
+
+Generate XML Unit Test reports under `target/surefire-reports`:
+```bash
+mvn clean test
+```
+
+Generate HTML Unit Test reports as `target/site/surefire-report.html`:
+```bash
+mvn clean site
+```
+Notes:
+- Use `maven-surefire-report-plugin` to generate HTML Unit Test reports
+- Use `maven-jxr-plugin` for Source Code Reference for Failed Tests
+- Require `maven-site-plugin` to support nice css rendering
+- Disable `maven-project-info-reports-plugin` to generate project information to save a lot of time!
+
+References:
+- https://maven.apache.org/surefire/maven-surefire-report-plugin/index.html
+- https://maven.apache.org/surefire/maven-surefire-report-plugin/examples/cross-referencing.html
+- https://www.thecodejournal.tech/2021/05/unit-testing-in-maven-junit-html-report/
+- https://howtodoinjava.com/junit5/junit-html-report/
+- https://maven.apache.org/plugins/maven-site-plugin/
+- https://stackoverflow.com/questions/35982312/disable-all-reports-from-mavens-project-info-reports-plugin
 
 ## References
 

@@ -104,7 +104,6 @@ SELECT user, host, account_locked, password_expired FROM mysql.user;
 Access MySQL with admin user:
 ```bash
 mysql -uadmin -pdba123 -P6603 -h127.0.0.1
-use test_db;
 ```
 
 Switch to the database:
@@ -112,7 +111,7 @@ Switch to the database:
 use test_db;
 ```
 
-Create a table as below:
+Create table SQL as below:
 - `src/main/resources/db/migration/V0.1__create_tables.sql`
 
 
@@ -136,19 +135,20 @@ See `PublisherJpaEntity.java`.
 See `PublisherRepository.java`.
 
 1. Default methods in repository
-2. Customize query with JPQL
+2. Auto `findByXXX` method
+3. Customize query with JPQL
 ```java
     @Query("SELECT p FROM PublisherJpaEntity p WHERE p.deleted = false AND p.id = ?1")
     Optional<PublisherJpaEntity> findPublisherById(Long id);
 ```
-3. Customize update with JPQL
+4. Customize update with JPQL
 ```java
     @Modifying
     @Query("UPDATE PublisherJpaEntity p SET p.deleted = true WHERE p.id = ?1")
     @Transactional
     void deletePublisherById(Long id);
 ```
-4. Cutomize query with Native SQL
+5. Cutomize query with Native SQL
 ```java
     @Query(
         value = "SELECT p.* FROM t_publisher p WHERE p.is_deleted = 0 ORDER BY p.publisher_name ASC",
@@ -190,12 +190,15 @@ http :8080/publishers
 ```
 
 ## JPA Many to Many
+TBC
 
-
+## JPA One to Many
+TBC
 
 ## References
 
 - https://spring.io/guides/gs/accessing-data-mysql/
+  
 - https://www.bezkoder.com/spring-boot-jpa-crud-rest-api/
 - https://www.bezkoder.com/spring-jpa-query/
 - https://www.bezkoder.com/jpa-many-to-many/

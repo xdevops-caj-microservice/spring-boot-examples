@@ -3,6 +3,7 @@ package cn.xdevops.transform;
 import cn.xdevops.domain.model.entities.Book;
 import cn.xdevops.jpaentities.BookJpaEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface BookMapper {
     Book jpaEntityToBook(BookJpaEntity bookJpaEntity);
 
     List<Book> jpaEntityListToBookList(List<BookJpaEntity> bookJpaEntityList);
+
+    void updateJpaEntityFromBook(Book book, @MappingTarget BookJpaEntity bookJpaEntity);
 }

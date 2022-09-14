@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Basic Mapping and Mapping List
@@ -77,5 +78,28 @@ class BookMapperTest {
         assertThat(bookList).containsExactlyElementsOf(
                 List.of(BookMapper.MAPPER.jpaEntityToBook(bookJpaEntity1),
                         BookMapper.MAPPER.jpaEntityToBook(bookJpaEntity2)));
+    }
+
+    @Test
+    @DisplayName("should update existing jpa entity from book")
+    void shouldUpdateExistingJpaEntityFromBook() {
+        BookJpaEntity bookJpaEntity = BookJpaEntity.builder()
+                .bookName("ABC")
+                .description("level 1")
+                .isbn("1001")
+                .publishDate(LocalDate.of(2020, 12, 3))
+                .build();
+
+        Book book = Book.builder()
+                .bookName("ABC English")
+                .build();
+
+        BookMapper.MAPPER.updateJpaEntityFromBook(book, bookJpaEntity);
+
+        assertThat(bookJpaEntity).isNotNull();
+        assertThat(bookJpaEntity.getBookName()).isEqualTo(book.getBookName());
+        assertThat(bookJpaEntity.getDescription()).isNull();
+        assertThat(bookJpaEntity.getIsbn()).isNull();
+        assertThat(bookJpaEntity.getPublishDate()).isNull();
     }
 }

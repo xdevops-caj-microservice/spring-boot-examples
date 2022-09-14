@@ -19,4 +19,6 @@ public interface DeliveryAddressMapper {
     @Mapping(source = "address.street", target = "street")
     @Mapping(source = "address.detailAddress", target = "detailAddress")
     DeliveryAddress toDeliveryAddress(Customer customer, Address address);
+
+    DeliveryAddress toDeliveryAddressByDefault(Customer customer, Address address);
 }

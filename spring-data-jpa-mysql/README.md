@@ -151,14 +151,13 @@ See `PublisherRepository.java`.
    - greater than: `findBy<Column>GreaterThan` (`WHERE column > ?`)
    - less than: `findBy<Column>LessThan` (`WHERE column < ?`)
    - between: `findBy<Column>Between` (`WHERE column BETWEEN ? AND ?`)
-   - more usages: 
-    - Derived count query
+- Derived count query
    - `countByXXX`
 - Derived delete
    - `deleteByXXX`
    - `removeByXXX`
 - Derived update
-  - Currently, doesn't support derived updated
+  - Currently, doesn't support derived update
   
 References
 - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
@@ -181,15 +180,14 @@ References
     @Query("SELECT p FROM PublisherJpaEntity p WHERE p.deleted = false AND p.id = ?1")
     Optional<PublisherJpaEntity> findPublisherById(Long id);
 ```
-- Customize update with Native SQL
+- - Customize update with Native SQL, and use named parameter instead of positional parameter
 ```java
     @Modifying
-    @Query(
-            value = "UPDATE t_publisher p SET p.is_deleted = 1, p.update_time = now() WHERE p.id = ?1",
-            nativeQuery = true
-    )
+    @Query(value = "UPDATE PublisherJpaEntity p SET p.deleted = :deleted, p.updateTime = :updateTime WHERE p.id = :id")
     @Transactional
-    void deletePublisherById(Long id);
+    void updateDeletedAndUpdateTimeById(@Param("deleted") boolean deleted,
+                                        @Param("updateTime") LocalDateTime updateTime,
+                                        @Param("id") Long id);
 ```
 - Cutomize query with Native SQL
 ```java

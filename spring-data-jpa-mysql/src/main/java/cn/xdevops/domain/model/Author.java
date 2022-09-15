@@ -1,4 +1,4 @@
-package cn.xdevops.domain.model.entities;
+package cn.xdevops.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

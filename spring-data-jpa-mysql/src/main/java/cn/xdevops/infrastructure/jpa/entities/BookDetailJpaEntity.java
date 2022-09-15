@@ -5,27 +5,38 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "t_publisher")
+@Table(name = "t_book_detail")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PublisherJpaEntity {
+public class BookDetailJpaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "publisher_name", nullable = false)
-    private String publisherName;
+    @Column(name = "book_id", nullable = false)
+    private Long bookId;
 
-    @Column(name = "city")
-    private String city;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "onboard_date")
-    private LocalDate onboardDate;
+    @Column(name = "page_count")
+    private Integer pageCount;
+
+    @Column(name = "word_count")
+    private Integer wordCount;
+
+    @Column(name = "paper_format")
+    private String paperFormat;
+
+    @Column(name = "paper_type")
+    private String paperType;
+
+    @Column(name = "package_type")
+    private String packageType;
 
     @Column(name = "create_time", nullable = false)
     private LocalDateTime createTime;
@@ -35,4 +46,5 @@ public class PublisherJpaEntity {
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
+
 }

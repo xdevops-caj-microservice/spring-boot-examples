@@ -1,4 +1,4 @@
-package cn.xdevops.interfaces.dto;
+package cn.xdevops.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +10,13 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateBookRequest {
+public class Book {
+    private String bookId;
     private String bookName;
     private String isbn;
+    private String description;
     private BigDecimal price;
     private LocalDate publishDate;
-    private String description;
     private Integer pageCount;
     private Integer wordCount;
     private String paperFormat;

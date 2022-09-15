@@ -1,5 +1,6 @@
 package cn.xdevops.infrastructure.jpa.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,6 @@ public class BookJpaEntity {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    @Column(name = "description")
-    private String description;
-
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
@@ -42,4 +40,5 @@ public class BookJpaEntity {
 
     @Column(name = "is_deleted", nullable = false)
     private boolean deleted;
+
 }

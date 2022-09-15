@@ -1,6 +1,6 @@
 package cn.xdevops.interfaces.transform;
 
-import cn.xdevops.domain.model.entities.Publisher;
+import cn.xdevops.domain.model.Publisher;
 import cn.xdevops.infrastructure.jpa.entities.PublisherJpaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

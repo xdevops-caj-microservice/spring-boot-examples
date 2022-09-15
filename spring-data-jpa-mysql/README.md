@@ -26,6 +26,7 @@ docker run \
 -d \
 --name=local-mysql \
 -e="MYSQL_ROOT_PASSWORD=admin123" \
+-e="TZ=Asia/Shanghai" \
 -p 6603:3306 \
 -v=/Users/william/data/mysql/config/conf.d:/etc/mysql/conf.d \
 -v=/Users/william/data/mysql/mysql-data:/var/lib/mysql \
@@ -59,6 +60,9 @@ mysql -uroot -padmin123 -P6603 -h127.0.0.1
 Verify by below commands:
 ```bash
 show databases;
+
+# verify timezone
+select now();
 ```
 
 ### Create Database
@@ -134,21 +138,44 @@ See `PublisherJpaEntity.java`.
 
 See `PublisherRepository.java`.
 
-1. Default methods in repository
-2. Auto `findByXXX` method
-3. Customize query with JPQL
+- Default methods in repository
+   - See `CrudRepository` interface
+- Derived query:
+   - equals to : `findBy<Column>` (`WHERE column = ?`)
+   - like: `findBy<Column>Like` (`WHERE column like ?`)
+   - containing: `findBy<Column>Containing` (`WHERE column like '%?%'`)
+   - in: `findBy<Column>In` (`WHERE column IN('aa', 'bb')`)
+   - greater than: `findBy<Column>GreaterThan` (`WHERE column > ?`)
+   - less than: `findBy<Column>LessThan` (`WHERE column < ?`)
+   - between: `findBy<Column>Between` (`WHERE column BETWEEN ? AND ?`)
+   - more usages: 
+     - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
+     - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#appendix.query.method.subject
+- Derived count query
+   - `countByXXX`
+- Derived delete
+   - `deleteByXXX`
+   - `removeByXXX`
+- Sorting
+   - TBC
+- Paging
+   - TBC
+- Customize query with JPQL
 ```java
     @Query("SELECT p FROM PublisherJpaEntity p WHERE p.deleted = false AND p.id = ?1")
     Optional<PublisherJpaEntity> findPublisherById(Long id);
 ```
-4. Customize update with JPQL
+- Customize update with Native SQL
 ```java
     @Modifying
-    @Query("UPDATE PublisherJpaEntity p SET p.deleted = true WHERE p.id = ?1")
+    @Query(
+            value = "UPDATE t_publisher p SET p.is_deleted = 1, p.update_time = now() WHERE p.id = ?1",
+            nativeQuery = true
+    )
     @Transactional
     void deletePublisherById(Long id);
 ```
-5. Cutomize query with Native SQL
+- Cutomize query with Native SQL
 ```java
     @Query(
         value = "SELECT p.* FROM t_publisher p WHERE p.is_deleted = 0 ORDER BY p.publisher_name ASC",
@@ -161,7 +188,9 @@ See `PublisherRepository.java`.
 
 Create a publisher:
 ```bash
-echo '{"publisherName": "精华出版社"}' | http POST :8080/publishers
+echo '{"publisherName": "精华出版社", "city": "Guangzhou", "onboardDate": "2009-12-01"}' | http POST :8080/publishers
+echo '{"publisherName": "滨海出版社", "city": "Xiamen", "onboardDate": "2012-11-21"}' | http POST :8080/publishers
+echo '{"publisherName": "青春出版社", "city": "Guangzhou", "onboardDate": "2013-06-05"}' | http POST :8080/publishers
 ```
 
 Find a valid publisher:
@@ -189,14 +218,114 @@ Find all valid publishers:
 http :8080/publishers
 ```
 
-## JPA Many to Many
-TBC
+Search examples with `findBy`:
+```bash
+# findByCity
+http :8080/publishers/search/city city==Guangzhou
+
+# findByCityLike
+http :8080/publishers/search/citylike city==Guang
+
+# findByCityContaining
+http :8080/publishers/search/citycontaining city==ang
+
+# findByCityIn
+http :8080/publishers/search/cityin city1==Guangzhou city2==Xiamen
+
+# findByOnboardDateGreaterThan
+http :8080/publishers/search/onboardgreaterthan onboard==2010-10-10
+
+# findByOnboardDateLessThan
+http :8080/publishers/search/onboardlessthan onboard==2010-10-10
+
+# findByOnboardDateBetween
+http :8080/publishers/search/onboardbetween start==2010-10-10 end==2013-05-05
+```
+
+## JPA One to One
+
+有两种方式实现1-1关系：
+1. 外键 （适用于有1-1关联关系的两个表）
+2. 共享主键 （适用于1-1的主表和明细表）
+
+现在一般不主张使用外键，而是在应用层面实现外键概念。
+因此本例子不在数据库表上建立外键，也不使用JPA自带的`@OneToOne`相关注解。
+
+本例做法：
+1. 将表A的id作为表B的1-1关联字段，并在表B中设置该字段为唯一索引，但是不将该字段作为外键。
+
+Sample code:
+- Entity Layer
+  - `BookJpaEntity.java`
+  - `BookDetailJpaEntity.java`
+- Repository Layer
+  - `BookRepository.java`
+  - `BookDetailRepository.java`
+- Service Layer
+  - `BookService.java`
+
+
+References:
+- https://www.baeldung.com/jpa-one-to-one
+- 阿里Java开发规范
+
+## JPA One to One test
+
+### Create a book
+API:
+```bash
+POST /books
+```
+
+Request body:
+```json
+{
+  "bookName": "乡土中国",
+  "isbn": "978654321",
+  "price": 22.8,
+  "publishDate": "2019-10-01",
+  "pageCount": 208,
+  "wordCount": 1000000,
+  "paperFormat": "32开",
+  "paperType": "胶版纸",
+  "packageType": "平装-胶订"
+}
+```
 
 ## JPA One to Many
 TBC
 
+## JPA Many to Many
+TBC
+
+
+## JPA Transaction
+
+Default behaviour:
+- Enable Transaction Management by default
+- The default `propagation` in `@Tranactional` is `REQUIRED`
+- The fefault isolation level is `DEFAULT` (same as database ?)
+
+Pitfalls:
+- Any **self-invocation** calls will NOT start any transaction
+- Only **public methods** should be annotated with `@Transactional`
+
+Usage
+- Use `@Transactional` at class level or method level
+- Notes only public method will work
+
+References:
+- https://www.baeldung.com/transaction-configuration-with-jpa-and-spring
+- https://thorben-janssen.com/transactions-spring-data-jpa/
+- https://www.baeldung.com/spring-transactional-propagation-isolation
+
+
+
+
 ## References
 
+Spring Docs:
+- https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
 - https://spring.io/guides/gs/accessing-data-mysql/
   
 - https://www.bezkoder.com/spring-boot-jpa-crud-rest-api/
@@ -207,3 +336,5 @@ TBC
 - https://www.baeldung.com/spring-data-jpa-modifying-annotation
 - https://www.baeldung.com/the-persistence-layer-with-spring-and-jpa
 - https://stackoverflow.com/questions/10394857/how-to-use-transactional-with-spring-data
+
+- https://www.baeldung.com/spring-data-jpa-query

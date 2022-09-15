@@ -5,7 +5,6 @@ CREATE TABLE `t_book` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `book_name` varchar(256)  NOT NULL COMMENT '书名',
     `isbn` varchar(32) NOT NULL COMMENT '国际标准书号ISBN',
-    `description` varchar(256)  COMMENT '描述',
     `price` decimal(10,2) unsigned NOT NULL COMMENT '价格',
     `publish_date` date NOT NULL COMMENT '出版日期',
     `create_time` datetime NOT NULL COMMENT '创建时间',
@@ -15,6 +14,23 @@ CREATE TABLE `t_book` (
     UNIQUE KEY `uk_isbn` (`isbn`) USING BTREE,
     KEY `idx_book_name` (`book_name`) USING BTREE
 ) COMMENT='图书表';
+
+-- t_book_detail 图书详情表
+CREATE TABLE `t_book_detail` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `book_id` bigint(20) unsigned NOT NULL COMMENT '图书ID',
+    `description` varchar(256)  COMMENT '描述',
+    `page_count` int(10) unsigned NULL COMMENT '页数',
+    `word_count` int(10) unsigned NULL COMMENT '字数',
+    `paper_format` varchar(64) NULL COMMENT '开本',
+    `paper_type` varchar(64) NULL COMMENT '纸张',
+    `package_type` varchar(64) NULL COMMENT '包装类型',
+    `create_time` datetime NOT NULL COMMENT '创建时间',
+    `update_time` datetime NOT NULL COMMENT '更新时间',
+    `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '软删除标识：0 有效， 1 已删除',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_book_id` (`book_id`) USING BTREE
+) COMMENT='图书详情表';
 
 -- t_author 作者表
 CREATE TABLE `t_author` (
@@ -34,6 +50,8 @@ CREATE TABLE `t_author` (
 CREATE TABLE `t_publisher` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `publisher_name` varchar(128)  NOT NULL COMMENT '出版社名称',
+    `city` varchar(64)  NULL COMMENT '所在城市',
+    `onboard_date` date NULL COMMENT '入驻日期',
     `create_time` datetime NOT NULL COMMENT '创建时间',
     `update_time` datetime NOT NULL COMMENT '更新时间',
     `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '软删除标识：0 有效， 1 已删除',

@@ -6,30 +6,20 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateBookResponse {
-    private String bookId;
+    private Long bookId;
     private String bookName;
     private String isbn;
-    private String description;
     private BigDecimal price;
     private LocalDate publishDate;
-    private List<Author> authors;
-    private List<Publisher> publishers;
-
-    private class Author {
-        private String authorId;
-        private String firstName;
-        private String lastName;
-        private String nationality;
-    }
-
-    private class Publisher {
-        private String publisherId;
-        private String publisherName;
-    }
+    private String description;
+    private Integer pageCount;
+    private Integer wordCount;
+    private String paperFormat;
+    private String paperType;
+    private String packageType;
 }

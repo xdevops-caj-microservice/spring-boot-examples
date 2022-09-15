@@ -5,9 +5,12 @@ import cn.xdevops.infrastructure.jpa.entities.PublisherJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,14 +70,17 @@ public interface PublisherRepository extends JpaRepository<PublisherJpaEntity, L
 
     /**
      * `updateDeletedAndUpdateTimeById(false, updateTime, id)` same as `deletePublisherById(id)`
+     * use named parameters `@Param`
      * @param deleted
      * @param updateTime
      * @param id
      */
     @Modifying
-    @Query(value = "UPDATE PublisherJpaEntity p SET p.deleted = ?1, p.updateTime = ?2 WHERE p.id = ?3")
+    @Query(value = "UPDATE PublisherJpaEntity p SET p.deleted = :deleted, p.updateTime = :updateTime WHERE p.id = :id")
     @Transactional
-    void updateDeletedAndUpdateTimeById(boolean deleted, LocalDate updateTime, Long id);
+    void updateDeletedAndUpdateTimeById(@Param("deleted") boolean deleted,
+                                        @Param("updateTime") LocalDateTime updateTime,
+                                        @Param("id") Long id);
 
     List<PublisherJpaEntity> findByCity(String city);
 

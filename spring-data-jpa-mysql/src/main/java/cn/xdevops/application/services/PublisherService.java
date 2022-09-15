@@ -102,6 +102,6 @@ public class PublisherService {
 //    }
 
     private void deletePublisher(Long id) {
-        publisherRepository.updateDeletedAndUpdateTimeById(false, LocalDate.now(), id);
+        publisherRepository.updateDeletedAndUpdateTimeById(false, LocalDateTime.now(), id);
     }
 }

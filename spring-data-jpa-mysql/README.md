@@ -138,8 +138,11 @@ See `PublisherJpaEntity.java`.
 
 See `PublisherRepository.java`.
 
+### Default CRUD method
 - Default methods in repository
    - See `CrudRepository` interface
+  
+### Derived Query
 - Derived query:
    - equals to : `findBy<Column>` (`WHERE column = ?`)
    - like: `findBy<Column>Like` (`WHERE column like ?`)
@@ -149,17 +152,30 @@ See `PublisherRepository.java`.
    - less than: `findBy<Column>LessThan` (`WHERE column < ?`)
    - between: `findBy<Column>Between` (`WHERE column BETWEEN ? AND ?`)
    - more usages: 
-     - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
-     - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#appendix.query.method.subject
-- Derived count query
+    - Derived count query
    - `countByXXX`
 - Derived delete
    - `deleteByXXX`
    - `removeByXXX`
-- Sorting
+- Derived update
+  - Currently, doesn't support derived updated
+  
+References
+- https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
+- https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#appendix.query.method.subject
+
+  
+### Sorting
+- Static Sorting
+   - `findByDeletedFalseOrderByPublisherNameAsc`
+- Dynamic Sorting
+  - TBC
+  
+### Pagination
+- Pagination
    - TBC
-- Paging
-   - TBC
+  
+### Customize query with @Query
 - Customize query with JPQL
 ```java
     @Query("SELECT p FROM PublisherJpaEntity p WHERE p.deleted = false AND p.id = ?1")
@@ -183,6 +199,10 @@ See `PublisherRepository.java`.
     )
     List<PublisherJpaEntity> findAllPublishers();
 ```
+
+### Customize query with @NamedQuery
+
+TBC
 
 ## Simple CRUD REST API test
 
@@ -327,6 +347,9 @@ References:
 Spring Docs:
 - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
 - https://spring.io/guides/gs/accessing-data-mysql/
+- https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.query-creation
+- https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#appendix.query.method.subject
+
   
 - https://www.bezkoder.com/spring-boot-jpa-crud-rest-api/
 - https://www.bezkoder.com/spring-jpa-query/
@@ -338,3 +361,6 @@ Spring Docs:
 - https://stackoverflow.com/questions/10394857/how-to-use-transactional-with-spring-data
 
 - https://www.baeldung.com/spring-data-jpa-query
+
+- https://attacomsian.com/blog/spring-data-jpa-query-annotation
+- https://attacomsian.com/blog/derived-query-methods-spring-data-jpa

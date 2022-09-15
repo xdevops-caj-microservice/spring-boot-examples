@@ -1,6 +1,6 @@
 # Spring Data JPA for MySQL
 
-## MySQL
+## Run MySQL
 
 MySQL softwares and tools:
 - MySQL 8 with container
@@ -64,6 +64,8 @@ show databases;
 # verify timezone
 select now();
 ```
+
+## Create Database and Tables
 
 ### Create Database
 
@@ -180,7 +182,7 @@ References
     @Query("SELECT p FROM PublisherJpaEntity p WHERE p.deleted = false AND p.id = ?1")
     Optional<PublisherJpaEntity> findPublisherById(Long id);
 ```
-- - Customize update with Native SQL, and use named parameter instead of positional parameter
+- Customize update with Native SQL, and use named parameter instead of positional parameter
 ```java
     @Modifying
     @Query(value = "UPDATE PublisherJpaEntity p SET p.deleted = :deleted, p.updateTime = :updateTime WHERE p.id = :id")

@@ -170,7 +170,15 @@ References
 - Static Sorting
    - `findByDeletedFalseOrderByPublisherNameAsc`
 - Dynamic Sorting
-  - TBC
+```java
+    public List<Publisher> findAllPublishersSorted(String sort, String direction) {
+        Sort dynamicSort = Sort.by(Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC),
+                PublisherSort.valueOfSortOptional(sort).orElse(PublisherSort.CREATED).getField());
+        return PublisherMapper.MAPPER.toPublisherList(
+                publisherRepository.findByDeletedFalse(dynamicSort));
+    }
+```
+  
   
 ### Pagination
 - Pagination
@@ -260,6 +268,13 @@ http :8080/publishers/search/onboardlessthan onboard==2010-10-10
 
 # findByOnboardDateBetween
 http :8080/publishers/search/onboardbetween start==2010-10-10 end==2013-05-05
+```
+
+Sorting:
+```bash
+http :8080/publishers/search/sorting sort==created direction==asc
+http :8080/publishers/search/sorting sort==updated direction==asc
+http :8080/publishers/search/sorting sort==name direction==asc
 ```
 
 ## JPA One to One
@@ -364,3 +379,5 @@ Spring Docs:
 
 - https://attacomsian.com/blog/spring-data-jpa-query-annotation
 - https://attacomsian.com/blog/derived-query-methods-spring-data-jpa
+- https://attacomsian.com/blog/spring-data-jpa-sorting
+- https://github.com/attacomsian/code-examples/tree/master/spring-data-jpa

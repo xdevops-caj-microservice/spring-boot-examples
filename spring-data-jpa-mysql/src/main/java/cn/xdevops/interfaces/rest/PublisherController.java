@@ -84,5 +84,20 @@ public class PublisherController {
         return publisherService.findPublisherByOnboardDateBetween(startDate, endDate);
     }
 
+    /**
+     *
+     * @param sort What to sort results by.
+     *             Default: `created`
+     *             Can be one of: `created`, `updated`, `name`
+     * @param direction The direction to sort the results by.
+     *                  Default: `desc`
+     *                  Can be one of: `asc`, `desc`
+     * @return
+     */
+    @GetMapping("/search/sorting")
+    public List<Publisher> findAllPublishersSorted(@RequestParam String sort, @RequestParam String direction) {
+        return publisherService.findAllPublishersSorted(sort, direction);
+    }
+
 
 }

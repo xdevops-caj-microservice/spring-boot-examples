@@ -2,6 +2,7 @@ package cn.xdevops.infrastructure.jpa.repositories;
 
 import cn.xdevops.domain.model.Publisher;
 import cn.xdevops.infrastructure.jpa.entities.PublisherJpaEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -95,4 +96,6 @@ public interface PublisherRepository extends JpaRepository<PublisherJpaEntity, L
     List<PublisherJpaEntity> findByOnboardDateLessThan(LocalDate onboardDate);
 
     List<PublisherJpaEntity> findByOnboardDateBetween(LocalDate startDate, LocalDate endDate);
+
+    List<PublisherJpaEntity> findByDeletedFalse(Sort ascending);
 }

@@ -3,9 +3,11 @@ package cn.xdevops.application.services;
 import cn.xdevops.domain.model.Publisher;
 import cn.xdevops.exception.PublisherNotFoundException;
 import cn.xdevops.infrastructure.jpa.entities.PublisherJpaEntity;
+import cn.xdevops.infrastructure.jpa.entities.PublisherSort;
 import cn.xdevops.infrastructure.jpa.repositories.PublisherRepository;
 import cn.xdevops.interfaces.transform.PublisherMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,5 +105,12 @@ public class PublisherService {
 
     private void deletePublisher(Long id) {
         publisherRepository.updateDeletedAndUpdateTimeById(false, LocalDateTime.now(), id);
+    }
+
+    public List<Publisher> findAllPublishersSorted(String sort, String direction) {
+        Sort dynamicSort = Sort.by(Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.ASC),
+                PublisherSort.valueOfSortOptional(sort).orElse(PublisherSort.CREATED).getField());
+        return PublisherMapper.MAPPER.toPublisherList(
+                publisherRepository.findByDeletedFalse(dynamicSort));
     }
 }

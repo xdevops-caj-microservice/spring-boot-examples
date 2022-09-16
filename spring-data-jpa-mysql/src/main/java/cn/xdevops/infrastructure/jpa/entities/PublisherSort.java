@@ -6,7 +6,8 @@ public enum PublisherSort {
 
     CREATED("created", "createTime"),
     UPDATED("updated", "updateTime"),
-    NAME("name", "publisherName");
+    NAME("name", "publisherName"),
+    ONBOARD("onboard", "onboardDate");
 
     private final String value;
     private final String field;

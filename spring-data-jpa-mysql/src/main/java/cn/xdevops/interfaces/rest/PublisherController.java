@@ -2,6 +2,8 @@ package cn.xdevops.interfaces.rest;
 
 import cn.xdevops.application.services.PublisherService;
 import cn.xdevops.domain.model.Publisher;
+import cn.xdevops.interfaces.dto.PageDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,5 +101,32 @@ public class PublisherController {
         return publisherService.findAllPublishersSorted(sort, direction);
     }
 
+    /**
+     *
+     * @param page Page number of the results to fetch.
+     *             Default: `1`
+     * @param size The number of results per page (max 10).
+     *             Default: `3`
+     * @return
+     */
+    @GetMapping("/search/paging")
+    public Page<Publisher> findAllPublishersPageable(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                     @RequestParam(value = "size", defaultValue = "3") Integer size) {
+        return publisherService.findAllPublishersPageable(page, size);
+    }
+
+    /**
+     *
+     * @param page Page number of the results to fetch.
+     *             Default: `1`
+     * @param size The number of results per page (max 10).
+     *             Default: `3`
+     * @return
+     */
+    @GetMapping("/search/pagingpagedto")
+    public PageDto<Publisher> findAllPublishersPageablePageDto(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                                        @RequestParam(value = "size", defaultValue = "3") Integer size) {
+        return new PageDto<>(publisherService.findAllPublishersPageable(page, size));
+    }
 
 }

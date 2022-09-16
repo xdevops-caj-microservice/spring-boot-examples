@@ -182,8 +182,27 @@ References
   
 ### Pagination
 - Pagination
-   - TBC
+```java
+    public Page<Publisher> findAllPublishersPageable(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), Math.min(size, 10),
+                Sort.by(PublisherSort.ONBOARD.getField()));
+        return PublisherMapper.MAPPER.toPublisherPage(
+                publisherRepository.findByDeletedFalse(pageable));
+    }
+```
+
+Customize page dto:
+- See `PageDto.java`
+
+Slice (faster pagination with less information):
+- TBD
+
   
+References
+- https://stackoverflow.com/questions/46186864/mapstruct-return-type
+- https://github.com/mapstruct/mapstruct/issues/607
+- https://stackoverflow.com/questions/63176297/how-do-i-make-a-dto-for-the-page-interface
+
 ### Customize query with @Query
 - Customize query with JPQL
 ```java
@@ -219,6 +238,9 @@ Create a publisher:
 echo '{"publisherName": "精华出版社", "city": "Guangzhou", "onboardDate": "2009-12-01"}' | http POST :8080/publishers
 echo '{"publisherName": "滨海出版社", "city": "Xiamen", "onboardDate": "2012-11-21"}' | http POST :8080/publishers
 echo '{"publisherName": "青春出版社", "city": "Guangzhou", "onboardDate": "2013-06-05"}' | http POST :8080/publishers
+echo '{"publisherName": "征途出版社", "city": "Guangzhou", "onboardDate": "2013-06-05"}' | http POST :8080/publishers
+echo '{"publisherName": "星辰出版社", "city": "Guangzhou", "onboardDate": "2020-02-02"}' | http POST :8080/publishers
+echo '{"publisherName": "哈尼出版社", "city": "Guangzhou", "onboardDate": "2021-04-12"}' | http POST :8080/publishers
 ```
 
 Find a valid publisher:
@@ -275,6 +297,48 @@ Sorting:
 http :8080/publishers/search/sorting sort==created direction==asc
 http :8080/publishers/search/sorting sort==updated direction==asc
 http :8080/publishers/search/sorting sort==name direction==asc
+```
+
+Pagination:
+```bash
+http :8080/publishers/search/paging page==1 size==3
+```
+
+Paging with cutomize pagedto
+```bash
+http :8080/publishers/search/pagingpagedto page==1 size==3
+```
+
+Customized pagedto example:
+```json
+{
+    "content": [
+        {
+            "city": "Guangzhou",
+            "id": 1,
+            "onboardDate": "2009-12-01",
+            "publisherName": "精华出版社"
+        },
+        {
+            "city": "Xiamen",
+            "id": 2,
+            "onboardDate": "2012-11-21",
+            "publisherName": "滨海出版社"
+        },
+        {
+            "city": "Guangzhou",
+            "id": 3,
+            "onboardDate": "2013-06-05",
+            "publisherName": "青春出版社"
+        }
+    ],
+    "page": {
+        "pageNumber": 1,
+        "pageSize": 3,
+        "totalElements": 6,
+        "totalPages": 2
+    }
+}
 ```
 
 ## JPA One to One

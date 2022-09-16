@@ -7,6 +7,9 @@ import cn.xdevops.infrastructure.jpa.entities.PublisherSort;
 import cn.xdevops.infrastructure.jpa.repositories.PublisherRepository;
 import cn.xdevops.interfaces.transform.PublisherMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,5 +115,12 @@ public class PublisherService {
                 PublisherSort.valueOfSortOptional(sort).orElse(PublisherSort.CREATED).getField());
         return PublisherMapper.MAPPER.toPublisherList(
                 publisherRepository.findByDeletedFalse(dynamicSort));
+    }
+
+    public Page<Publisher> findAllPublishersPageable(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), Math.min(size, 10),
+                Sort.by(PublisherSort.ONBOARD.getField()));
+        return PublisherMapper.MAPPER.toPublisherPage(
+                publisherRepository.findByDeletedFalse(pageable));
     }
 }
